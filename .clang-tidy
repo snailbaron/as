@@ -1,0 +1,18 @@
+Checks: >
+  *,
+  -altera-*,
+  -bugprone-easily-swappable-parameters,
+  -cppcoreguidelines-non-private-member-variables-in-classes,
+  -hicpp-named-parameter,
+  -hicpp-special-member-functions,
+  -llvmlibc-*,
+  -misc-non-private-member-variables-in-classes,
+  -modernize-use-trailing-return-type,
+  -readability-identifier-length,
+  -readability-named-parameter,
+  -readability-static-accessed-through-instance,
+CheckOptions:
+  - key: cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor
+    value: 'true'
+  - key: cppcoreguidelines-pro-type-member-init.UseAssignment
+    value: 'true'
