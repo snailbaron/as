@@ -7,7 +7,9 @@
 
 using namespace std::literals::chrono_literals;
 
-coro::Task waitOneSecond(coro::Pool& pool)
+namespace co = as::coro;
+
+co::Task waitOneSecond()
 {
     using namespace std::chrono_literals;
     using Clock = std::chrono::high_resolution_clock;
@@ -18,7 +20,7 @@ coro::Task waitOneSecond(coro::Pool& pool)
     std::cerr << "finished waiting\n";
 }
 
-coro::Task printWithWait(coro::Pool& pool)
+co::Task printWithWait()
 {
     const auto startTime = std::chrono::high_resolution_clock::now();
 
@@ -28,7 +30,7 @@ coro::Task printWithWait(coro::Pool& pool)
     };
 
     std::cout << timestamp() << "s before" << std::endl;
-    co_await waitOneSecond(pool);
+    co_await waitOneSecond();
     std::cout << timestamp() << "s after" << std::endl;
 }
 
@@ -37,10 +39,10 @@ int main()
     std::cout.setf(std::ios::fixed, std::ios::floatfield);
     std::cout.precision(2);
 
-    coro::Pool pool;
-    pool.run(printWithWait);
+    co::Pool pool;
+    pool << printWithWait();
     while (!pool.empty()) {
-        pool.runFor(100ms);
         std::cout << "." << std::endl;
+        pool.runFor(100ms);
     }
 }

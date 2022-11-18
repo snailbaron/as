@@ -11,9 +11,7 @@ else()
     add_compile_options(-Wall -Wextra -pedantic -Werror)
 endif()
 
-add_library(as
-    coro.cpp
-)
-target_include_directories(as PUBLIC include)
+add_library(as INTERFACE)
+target_include_directories(as INTERFACE include)
 
 add_subdirectory(examples)
