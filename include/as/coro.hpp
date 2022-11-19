@@ -49,6 +49,15 @@ class Pool {
     using Clock = std::chrono::high_resolution_clock;
 
 public:
+    Pool() = default;
+    Pool(const Pool&) = delete;
+    Pool(Pool&&) = default;
+
+    ~Pool()
+    {
+        clear();
+    }
+
     [[nodiscard]] bool empty() const
     {
         return _chains.empty();
@@ -117,6 +126,19 @@ public:
     {
         while (Clock::now() < end) {
             tick();
+        }
+    }
+
+    void clear()
+    {
+        _chainByHandle.clear();
+        for (auto& chain : _chains) {
+            while (!chain.empty()) {
+                if (!chain.top().done()) {
+                    chain.top().destroy();
+                }
+                chain.pop();
+            }
         }
     }
 

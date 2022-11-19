@@ -1,6 +1,7 @@
 #include <as.hpp>
 
 #include <SDL.h>
+#include <SDL_main.h>
 
 #include <chrono>
 #include <cmath>
@@ -214,27 +215,30 @@ int main()
                 auto p = toScreen(tree);
 
                 std::vector<SDL_Vertex> vertices{
-                    SDL_Vertex{.position = {p.x - 5, p.y + 5}, .color = {0, 100, 0, 255}},
-                    SDL_Vertex{.position = {p.x + 5, p.y + 5}, .color = {0, 100, 0, 255}},
-                    SDL_Vertex{.position = {p.x, p.y - 10}, .color = {0, 100, 0, 255}},
+                    SDL_Vertex{.position = {p.x - 5, p.y + 5}, .color = {0, 100, 0, 255}, .tex_coord = {}},
+                    SDL_Vertex{.position = {p.x + 5, p.y + 5}, .color = {0, 100, 0, 255}, .tex_coord = {}},
+                    SDL_Vertex{.position = {p.x, p.y - 10}, .color = {0, 100, 0, 255}, .tex_coord = {}},
                 };
                 sdlCheck(SDL_RenderGeometry(
                     renderer, nullptr, vertices.data(), 3, nullptr, 0));
             }
 
             {
-                SDL_SetRenderDrawColor(renderer, 200, 200, 200, 250);
+                sdlCheck(SDL_SetRenderDrawColor(renderer, 200, 200, 200, 250));
                 auto p = toScreen(world.eater);
                 SDL_FRect rect{.x = p.x - 5, .y = p.y - 5, .w = 10, .h = 10};
-                SDL_RenderFillRectF(renderer, &rect);
+                sdlCheck(SDL_RenderFillRectF(renderer, &rect));
             }
 
             SDL_RenderPresent(renderer);
         }
 
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+
         SDL_Quit();
     } catch (const std::exception& e) {
-        std::cerr << e.what() << "\n";
+        std::cerr << "error: " << e.what() << "\n";
         return 1;
     }
 }
