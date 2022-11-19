@@ -108,16 +108,13 @@ public:
     template <class Rep, class Period>
     void runFor(const std::chrono::duration<Rep, Period>& duration)
     {
-        auto end = Clock::now() + duration;
-        while (Clock::now() < end) {
-            tick();
-        }
+        runUntil(Clock::now() +
+            std::chrono::duration_cast<Clock::duration>(duration));
     }
 
     template <class C, class D>
-    void runUntil(const std::chrono::time_point<C, D>& endTimePoint)
+    void runUntil(const std::chrono::time_point<C, D>& end)
     {
-        auto end = std::chrono::time_point_cast<Clock::duration>(endTimePoint);
         while (Clock::now() < end) {
             tick();
         }

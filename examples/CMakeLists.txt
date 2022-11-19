@@ -1,2 +1,2 @@
-add_executable(as-example-01-basic 01-basic.cpp)
-target_link_libraries(as-example-01-basic as)
+add_subdirectory(01-basic)
+add_subdirectory(02-tree-eater)
