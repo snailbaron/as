@@ -122,7 +122,6 @@ co::Task jump(Vector& object)
 
 co::Task think(World& world)
 {
-    std::cerr << "thinking...\n";
     while (world.trees.size() >= 2) {
         size_t t1 = 0;
         size_t t2 = 1;
@@ -188,9 +187,7 @@ int main()
             world.trees.push_back(rnd().vector());
         }
 
-        std::cerr << "creating pool\n";
         auto pool = co::Pool{};
-        std::cerr << "scheduling task\n";
         pool << think(world);
 
         bool done = false;
@@ -202,7 +199,7 @@ int main()
                 }
             }
 
-            pool.runFor(std::chrono::duration<float>(1.f / 60));
+            pool.tick();
 
             sdlCheck(SDL_SetRenderDrawColor(renderer, 30, 40, 30, 255));
             sdlCheck(SDL_RenderClear(renderer));
@@ -238,7 +235,6 @@ int main()
 
         SDL_Quit();
     } catch (const std::exception& e) {
-        std::cerr << "error: " << e.what() << "\n";
         return 1;
     }
 }
